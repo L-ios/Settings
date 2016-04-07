@@ -112,6 +112,7 @@ import com.android.settings.wifi.AdvancedWifiSettings;
 import com.android.settings.wifi.SavedAccessPointsWifiSettings;
 import com.android.settings.wifi.WifiSettings;
 import com.android.settings.wifi.p2p.WifiP2pSettings;
+import com.android.settings.nightshift.NightShiftPreferenceFragment;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -294,6 +295,7 @@ public class SettingsActivity extends Activity
             KeyboardLayoutPickerFragment.class.getName(),
             ZenModeSettings.class.getName(),
             NotificationSettings.class.getName(),
+            NightShiftPreferenceFragment.class.getName(),
             ChooseLockPassword.ChooseLockPasswordFragment.class.getName(),
             ChooseLockPattern.ChooseLockPatternFragment.class.getName(),
             InstalledAppDetails.class.getName(),

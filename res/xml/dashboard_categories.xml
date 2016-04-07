@@ -100,6 +100,14 @@
                 android:icon="@drawable/ic_settings_notifications"
                 />
 
+        <!-- Night Shift -->
+        <dashboard-tile
+                android:id="@+id/night_shift_settings"
+                android:title="@string/night_shift_settings"
+                android:fragment="com.android.settings.nightshift.NightShiftPreferenceFragment"
+                android:icon="@drawable/ic_settings_accessibility"
+                        />
+
         <!-- Storage -->
         <dashboard-tile
                 android:id="@+id/storage_settings"

@@ -1075,6 +1075,19 @@
                 android:value="true" />
         </activity>
 
+        <activity android:name="Settings$NightShiftActivity"
+                android:label="@string/night_shift_settings"
+                android:taskAffinity="com.android.settings"
+                android:parentActivityName="Settings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="com.android.settings.ACCESSIBILITY_COLOR_SPACE_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
+                android:value="com.android.settings.notification.NotificationSettings" />
+        </activity>
+
         <activity android:name="Settings$CaptioningSettingsActivity"
                 android:label="@string/accessibility_captioning_title"
                 android:taskAffinity="com.android.settings"

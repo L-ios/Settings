@@ -58,6 +58,9 @@
                 android:summaryOn="@string/install_unknown_applications"
                 android:persistent="false" />
 
+        <SwitchPreference android:key="multi_app_switch"
+                android:title="@string/wechat_double_open"
+                android:persistent="false" />
     </PreferenceCategory>
 
     <PreferenceCategory android:key="credentials_management"

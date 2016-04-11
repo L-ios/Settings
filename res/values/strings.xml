@@ -6056,4 +6056,6 @@
    <string name="night_shift_value_title">Color Temperature</string>
    <string name="night_shift_value_less_title">Less Warm</string>
    <string name="night_shift_value_more_title">More Warm</string>
+
+   <string name="wechat_double_open">Wechat Fake</string>
 </resources>

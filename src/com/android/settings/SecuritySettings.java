@@ -18,6 +18,7 @@ package com.android.settings;
 
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
@@ -28,6 +29,10 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.UserInfo;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.UserHandle;
 import android.os.UserManager;
@@ -101,11 +106,16 @@ public class SecuritySettings extends SettingsPreferenceFragment
     private static final String PACKAGE_MIME_TYPE = "application/vnd.android.package-archive";
     private static final String KEY_TRUST_AGENT = "trust_agent";
     private static final String KEY_SCREEN_PINNING = "screen_pinning_settings";
+    private static final String KEY_MULTI_APP = "multi_app_switch";
+
+    private static final String INSTALL_SHORTCUT = "com.android.launcher.action.INSTALL_SHORTCUT";
+
 
     // These switch preferences need special handling since they're not all stored in Settings.
     private static final String SWITCH_PREFERENCE_KEYS[] = { KEY_LOCK_AFTER_TIMEOUT,
             KEY_LOCK_ENABLED, KEY_VISIBLE_PATTERN, KEY_BIOMETRIC_WEAK_LIVELINESS,
-            KEY_POWER_INSTANTLY_LOCKS, KEY_SHOW_PASSWORD, KEY_TOGGLE_INSTALL_APPLICATIONS };
+            KEY_POWER_INSTANTLY_LOCKS, KEY_SHOW_PASSWORD, KEY_TOGGLE_INSTALL_APPLICATIONS,
+            KEY_MULTI_APP};
 
     // Only allow one trust agent on the platform.
     private static final boolean ONLY_ONE_TRUST_AGENT = true;
@@ -128,6 +138,8 @@ public class SecuritySettings extends SettingsPreferenceFragment
     private SwitchPreference mToggleAppInstallation;
     private DialogInterface mWarnInstallApps;
     private SwitchPreference mPowerButtonInstantlyLocks;
+
+    private SwitchPreference mMultiApp;
 
     private boolean mIsPrimary;
 
@@ -346,6 +358,9 @@ public class SecuritySettings extends SettingsPreferenceFragment
             mToggleAppInstallation.setEnabled(false);
         }
 
+        // multi application open
+        mMultiApp = (SwitchPreference) findPreference(KEY_MULTI_APP);
+
         // Advanced Security features
         PreferenceGroup advancedCategory =
                 (PreferenceGroup)root.findPreference(KEY_ADVANCED_SECURITY);
@@ -443,7 +458,7 @@ public class SecuritySettings extends SettingsPreferenceFragment
         }
         // Change the system setting
         Settings.Global.putInt(getContentResolver(), Settings.Global.INSTALL_NON_MARKET_APPS,
-                                enabled ? 1 : 0);
+                enabled ? 1 : 0);
     }
 
     private void warnAppInstallation() {
@@ -455,6 +470,23 @@ public class SecuritySettings extends SettingsPreferenceFragment
                 .setPositiveButton(android.R.string.yes, this)
                 .setNegativeButton(android.R.string.no, this)
                 .show();
+    }
+
+    /**
+     * Convenience method for creating an intent that will add a shortcut to the home screen.
+     */
+    static Intent createAddToHomeIntent(Context context, String title, Bitmap icon) {
+        // TODO INSTALL SHORTCUT IN LAUNCHER
+        Intent i = new Intent(INSTALL_SHORTCUT);
+        Intent actionIntent = new Intent(Intent.ACTION_MAIN);
+        actionIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        // this package need to build some extra infomation to splite the two wechat
+        actionIntent.setClassName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI");
+        i.putExtra(Intent.EXTRA_SHORTCUT_INTENT, actionIntent);
+        i.putExtra(Intent.EXTRA_SHORTCUT_ICON, icon);
+        i.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
+        i.putExtra("duplicate", false);
+        return i;
     }
 
     @Override
@@ -696,6 +728,16 @@ public class SecuritySettings extends SettingsPreferenceFragment
                 result = false;
             } else {
                 setNonMarketAppsAllowed(false);
+            }
+        } else if (KEY_MULTI_APP.equals(key)) {
+            if ((Boolean) value) {
+                // todo send broadcast to add some app icon.
+                getActivity().sendBroadcast(
+                        createAddToHomeIntent(getActivity(), "双微信", null));
+                // todo write setting infomation.
+
+                // todo build the direction
+                // todo maybe need to build some enviroment
             }
         }
         return result;
